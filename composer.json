@@ -1,0 +1,9 @@
+{
+    "name": "user/webbylab",
+    "require": {},
+    "autoload": {
+    	"psr-4": {
+    		"User\\Webbylab\\": "src/"
+    	}
+    }
+}
