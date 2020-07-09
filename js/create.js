@@ -5,7 +5,8 @@ $(document).ready (function () {
         var release_year = $("#release_year").val ();
         var stars = $("#stars").val ();
         var format = $("#format").val ();
-        var myRe = new RegExp("[0-9]{4}", "gm")
+        var myRe = new RegExp("[0-9]{4}", "gm");
+        var now = new Date();
         var fail = "";
 
         if (name.length < 1 ) {
@@ -20,6 +21,9 @@ $(document).ready (function () {
         else if (stars.length < 1) {
             fail = "Вы не ввели список актеров";
         }
+        else if (release_year < 1850 || release_year > now.getFullYear()) {
+            fail = "Год не может быть меньше 1850 и больше " + now.getFullYear();
+        }
         if (fail != "") {
             $('#massegeShow').html (fail + "<div class='clear><br></div>'");
             $('#massegeShow').show ();
@@ -30,10 +34,10 @@ $(document).ready (function () {
                 type: 'POST',
                 cache: false,
                 data: {'name': name, 'release_year': release_year, 'stars': stars, 'format': format},
-                dataType: 'html',
+                dataType: 'json',
                 success: function (data){
-                    var url = "http://webbylab/";
-                    $(location).attr('href',url);
+                    $('#massegeShow').html (data);
+                    $('#massegeShow').show ();
                 }
             });
         }

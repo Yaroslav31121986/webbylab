@@ -11,12 +11,17 @@ $(document).ready (function () {
                 data: {'stars': stars},
                 dataType: 'json',
                 success: function (data){
-                    $('#massegeShow').html("");
-                    for (var i=0; i<=data.length-1; i++) {
-                        var project = data[i];
-                        $('#massegeShow').append('<a href="show.php?id='
-                            +project.id+'">'+project.title+'</a></br>');
+                    if (data.length < 1) {
+                        $('#massegeShow').html("Такого фильма нету");
                         $('#massegeShow').show ();
+                    } else {
+                        $('#massegeShow').html("");
+                        for (var i=0; i<=data.length-1; i++) {
+                            var project = data[i];
+                            $('#massegeShow').append('<a href="show.php?id='
+                                +project.id+'">'+project.title+'</a></br>');
+                            $('#massegeShow').show ();
+                        }
                     }
                 }
             });

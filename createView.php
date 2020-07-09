@@ -3,6 +3,7 @@
 use User\Webbylab\DB\InquiriesDb;
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once 'echo_dump.php';
 
 $objDb = new InquiriesDb();
 $formats = $objDb->getFormat();
@@ -27,7 +28,7 @@ $formats = $objDb->getFormat();
                     <select name="format" id="format">
                         <?php
                         foreach ($formats as $format){
-                            echo '<option value="'.$format["format"].'">'.$format["format"].'</option>';
+                            echo '<option value="'.$format.'">'.$format.'</option>';
                         }
                         ?>
                     </select>

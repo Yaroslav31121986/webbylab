@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <title>Главная</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
 <body>
 
@@ -17,7 +18,7 @@
             <a class="nav-item nav-link" href="createView.php">Добавить новый фильм</a>
             <a class="nav-item nav-link" href="searchByName.php">Найти фильм по названию</a>
             <a class="nav-item nav-link" href="searchByActors.php">Найти фильм по имени актера</a>
-            <a class="nav-item nav-link" href="public/sample_movies.txt" download>Импорт фильмов</a>
+            <a class="nav-item nav-link" href="download.php">Импорт фильмов</a>
         </div>
     </div>
 </nav>

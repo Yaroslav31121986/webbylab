@@ -23,7 +23,7 @@ class InquiriesDb
     //Достаем список фильмов, отсортированных по названию в алфавитном порядке
     public function getMovieList()
     {
-        $result = $this->mysqli->query("SELECT * FROM films ORDER BY title");
+        $result = $this->mysqli->query("SELECT * FROM films ORDER BY title COLLATE  utf8_unicode_ci");
         if (!$result) {
             die("Fatal Error");
         } else {
@@ -76,11 +76,25 @@ class InquiriesDb
     //Выбираем форматы фильмов
     public function getFormat()
     {
-        $result = $this->mysqli->query("SELECT format FROM films GROUP BY format");
+        $result = $this->mysqli->query("SHOW COLUMNS FROM films WHERE field = 'format' ");
         if (!$result) {
-            die("Fatal Error");
+            die($this->mysqli->connect_errno);
         } else {
-            return $this->resultToArray ($result);
+            $formats_arr = $this->resultToArray ($result);
+
+            foreach ($formats_arr as $format_arr){
+                $format_reg = $format_arr;
+            }
+
+            preg_match_all("(\'[A-Za-z-]{1,}\')", $format_reg['Type'], $matches, PREG_UNMATCHED_AS_NULL);
+
+            foreach ($matches as $formats){
+                foreach ($formats as $value){
+                    $result_format[] = trim($value, '\'');
+                }
+            }
+
+            return $result_format;
         }
     }
 
@@ -90,6 +104,61 @@ class InquiriesDb
         $result = $this->mysqli->query("SELECT * FROM films WHERE stars LIKE '%$name%'");
         if (!$result) {
             die("Fatal Error");
+        } else {
+            return $this->resultToArray ($result);
+        }
+    }
+
+    //Проверяем существует ли такой фильм
+    public function searchСoincidence($title, $release_year, $format, array $stars)
+    {
+        $sql_like = '';
+
+        for ($i = 0; $i < count($stars); $i++) {
+            if ($i > 0) {
+                $sql_like .= " AND stars LIKE '%$stars[$i]%'";
+            } else {
+                $sql_like .= " stars LIKE '%$stars[$i]%'";
+            }
+        }
+
+        $result = $this->mysqli->query("SELECT COUNT(id) FROM `films` WHERE title LIKE '%$title%' AND release_year LIKE '%$release_year%' AND format LIKE '%$format%' AND ($sql_like)");
+
+
+        if (!$result) {
+            die($this->mysqli->error);
+        } else {
+            while (($row = $result->fetch_assoc()) != false){
+                $array[] = $row;
+            }
+            return $array;
+        }
+
+    }
+
+    //Подсчитываем количество фильмов
+    public function countPages()
+    {
+        $result =  $this->mysqli->query("SELECT COUNT(id) FROM films");
+
+        if (!$result) {
+            die("Fatal Error");
+        }
+        else {
+            $countPages = $result->fetch_assoc();
+            $count = $countPages["COUNT(id)"];
+            return $count;
+        }
+    }
+
+    //Достаем нужное количество фильмов
+    public function getPages($limit)
+    {
+        $max = 3;
+        $result = $this->mysqli->query("SELECT * FROM films ORDER BY title COLLATE  utf8_unicode_ci LIMIT $limit,$max");
+
+        if (!$result) {
+            die($this->mysqli->error);
         } else {
             return $this->resultToArray ($result);
         }
